@@ -4,6 +4,7 @@ env = gym.make('Blackjack-v1', natural=False, sab=False)
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import ThreadPoolExecutor
 from evaluate_utils import evaluate_strategy
+from functools import partial
 
 class BlackjackGA:
     def __init__(self, population_size=50, mutation_rate=0.01, generations=100, episodes=10000):
@@ -56,7 +57,8 @@ class BlackjackGA:
         for generation in range(self.generations):
             # Evaluate the fitness of each strategy
             with ProcessPoolExecutor() as executor:
-                fitness = list(executor.map(lambda strategy: evaluate_strategy(strategy, self.episodes), self.population))
+                partial_eval = partial(evaluate_strategy, total_episodes=self.episodes, workers=8)
+                fitness = list(executor.map(partial_eval, self.population))
             
             # Find the best strategy in this generation
             best_idx = np.argmax(fitness)

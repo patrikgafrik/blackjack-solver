@@ -50,7 +50,6 @@ def create_training_data():
                 action = 1
                 
             y.append(action)
-            print(f"State: {state}, Action: {action}")
     
     # Soft totals (with usable ace)
     for player_sum in range(12, 22):  # Soft totals 12-21 (Ace + something)
@@ -70,7 +69,6 @@ def create_training_data():
                 action = 1
                 
             y.append(action)
-            print(f"State: {state}, Action: {action}")
     
             
     return np.array(X), np.array(y)
@@ -150,7 +148,7 @@ class BlackjackNN:
         prediction = self.model.predict(normalized_state, verbose=0)[0][0]
         return 1 if prediction > 0.5 else 0
     
-    def evaluate(self, num_episodes=20000):
+    def evaluate(self, num_episodes=2000):
         """Evaluate the model by playing games."""
         total_reward = 0
         
